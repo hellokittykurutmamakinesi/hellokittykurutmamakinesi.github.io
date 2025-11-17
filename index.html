@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello Kitty Saç Kurutma Makinesi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        body {
+            font-family: 'Quicksand', 'Fredoka', sans-serif;
+            background: linear-gradient(135deg, #ffc0cb 0%, #fff0f5 50%, #ffe4e1 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            position: relative;
+            overflow-x: hidden;
+            touch-action: manipulation;
+        }
+
+        /* Polka dot background pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle, rgba(255, 192, 203, 0.3) 2px, transparent 2px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+            animation: floatIn 0.8s ease-out;
+        }
+
+        h1 {
+            color: #ff69b4;
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            font-weight: 700;
+            text-shadow: 2px 2px 0px rgba(255, 255, 255, 0.8);
+            margin-bottom: 10px;
+            word-wrap: break-word;
+        }
+
+        .subtitle {
+            color: #ff1493;
+            font-size: clamp(0.85rem, 3vw, 1rem);
+            font-weight: 400;
+            letter-spacing: 1px;
+        }
+
+        /* Hair Dryer Image Container */
+        .dryer-wrapper {
+            perspective: 1000px;
+            margin: 20px 0;
+            animation: scaleIn 0.6s ease-out;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .hair-dryer-image {
+            width: clamp(200px, 80vw, 280px);
+            height: clamp(280px, 110vw, 400px);
+            background: white;
+            border-radius: 20px;
+            padding: 15px;
+            box-shadow: 0 15px 40px rgba(255, 105, 180, 0.3);
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            active: 0.95;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .hair-dryer-image:active {
+            transform: scale(0.98);
+        }
+
+        .hair-dryer-image:hover {
+            transform: scale(1.02);
+        }
+
+        @media (hover: none) {
+            .hair-dryer-image:hover {
+                transform: scale(1);
+            }
+        }
+
+        .hair-dryer-image.running {
+            animation: vibrate 0.1s infinite;
+        }
+
+        /* SVG Hair Dryer Drawing */
+        svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.1));
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 20px;
+        }
+
+        /* Decorative Sparkles */
+        .sparkle {
+            position: fixed;
+            pointer-events: none;
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            animation: sparkleFloat 3s ease-in-out forwards;
+            z-index: 0;
+        }
+
+        /* Status Text */
+        .status-text {
+            color: #ff1493;
+            font-size: clamp(0.75rem, 2vw, 0.9rem);
+            text-align: center;
+            margin-top: 15px;
+            min-height: 20px;
+        }
+
+        /* Animations */
+        @keyframes vibrate {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-3px); }
+            75% { transform: translateX(3px); }
+        }
+
+        @keyframes floatIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes sparkleFloat {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-60px) scale(0);
+            }
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 30px;
+            text-align: center;
+            color: #ff1493;
+            font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+            opacity: 0.8;
+            animation: floatIn 1s ease-out;
+        }
+
+        .footer-text {
+            margin: 5px 0;
+        }
+
+        .heart {
+            color: #ff69b4;
+            animation: heartbeat 1.2s infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        /* Mobile Optimizations */
+        @media (max-width: 480px) {
+            body {
+                padding: 12px;
+            }
+
+            header {
+                margin-bottom: 20px;
+            }
+
+            .dryer-wrapper {
+                margin: 15px 0;
+            }
+
+            .hair-dryer-image {
+                padding: 12px;
+            }
+
+            h1 {
+                margin-bottom: 8px;
+            }
+        }
+
+        @media (max-height: 600px) {
+            header {
+                margin-bottom: 15px;
+            }
+
+            footer {
+                margin-top: 20px;
+            }
+
+            .hair-dryer-image {
+                width: clamp(160px, 70vw, 240px);
+                height: clamp(220px, 100vw, 320px);
+            }
+        }
+
+        /* Prevent zoom on double tap */
+        input, button {
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>✨ Hello Kitty Saç Kurutması ✨</h1>
+            <p class="subtitle">Click to Use!</p>
+        </header>
+
+        <!-- Hair Dryer Image -->
+        <div class="dryer-wrapper">
+            <div class="hair-dryer-image" id="hairDryer">
+                <svg id="defaultSVG" viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Nozzle -->
+                    <ellipse cx="150" cy="60" rx="50" ry="45" fill="#FFB6D9" stroke="#FF69B4" stroke-width="2"/>
+                    <!-- Nozzle opening -->
+                    <ellipse cx="150" cy="85" rx="35" ry="20" fill="#999999" stroke="#555" stroke-width="1"/>
+                    
+                    <!-- Main Body -->
+                    <rect x="110" y="100" width="80" height="200" rx="20" fill="#FF69B4" stroke="#FF1493" stroke-width="2"/>
+                    
+                    <!-- Cute Hello Kitty Bow on top -->
+                    <!-- Left bow -->
+                    <ellipse cx="120" cy="95" rx="20" ry="25" fill="#FF1493" transform="rotate(-30 120 95)"/>
+                    <!-- Right bow -->
+                    <ellipse cx="180" cy="95" rx="20" ry="25" fill="#FF1493" transform="rotate(30 180 95)"/>
+                    <!-- Bow center -->
+                    <circle cx="150" cy="105" r="12" fill="#FFB6D9"/>
+                    
+                    <!-- Display Screen -->
+                    <rect x="125" y="130" width="50" height="40" rx="8" fill="#FFFFFF" stroke="#FF69B4" stroke-width="2"/>
+                    <text x="150" y="153" text-anchor="middle" font-size="16" fill="#FF1493" font-weight="bold">HEAT</text>
+                    
+                    <!-- Power Button -->
+                    <circle cx="150" cy="220" r="18" fill="#FFFF00" stroke="#FFD700" stroke-width="2"/>
+                    <text x="150" y="227" text-anchor="middle" font-size="12" fill="#FF69B4" font-weight="bold">ON</text>
+                    
+                    <!-- Handle -->
+                    <path d="M 190 180 Q 220 160 220 240 Q 220 280 190 260" 
+                          stroke="#FF69B4" stroke-width="12" fill="none" stroke-linecap="round"/>
+                    
+                    <!-- Whiskers (Hello Kitty style) -->
+                    <line x1="130" y1="115" x2="110" y2="110" stroke="#FF1493" stroke-width="2" stroke-linecap="round"/>
+                    <line x1="130" y1="125" x2="110" y2="130" stroke="#FF1493" stroke-width="2" stroke-linecap="round"/>
+                    <line x1="170" y1="115" x2="190" y2="110" stroke="#FF1493" stroke-width="2" stroke-linecap="round"/>
+                    <line x1="170" y1="125" x2="190" y2="130" stroke="#FF1493" stroke-width="2" stroke-linecap="round"/>
+                    
+                    <!-- Cute eyes dots -->
+                    <circle cx="140" cy="140" r="2" fill="#FF1493"/>
+                    <circle cx="160" cy="140" r="2" fill="#FF1493"/>
+                </svg>
+                <img id="customImage" style="display: none;">
+            </div>
+        </div>
+
+        <!-- Status Text -->
+        <div class="status-text" id="statusText"></div>
+
+        <!-- Footer -->
+        <footer>
+            <p class="footer-text">Made with <span class="heart">💖</span> for Hello Kitty Lovers</p>
+            <p class="footer-text">&copy; 2025 Hello Kitty Saç Kurutması. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <!-- Audio Element for Hair Dryer Sound -->
+    <audio id="dryerSound" preload="auto">
+        <source src="815169__ultra-edward__hair-dryer.wav" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // === HAIR KITTY HAIR DRYER FUNCTIONALITY ===
+
+        const hairDryer = document.getElementById('hairDryer');
+        const dryerSound = document.getElementById('dryerSound');
+        const defaultSVG = document.getElementById('defaultSVG');
+        const customImage = document.getElementById('customImage');
+        const statusText = document.getElementById('statusText');
+        let isRunning = false;
+        let soundDuration = 0;
+
+        // Load custom image on startup
+        customImage.src = "dryer.jpeg";
+        customImage.style.display = 'block';
+        defaultSVG.style.display = 'none';
+
+        // Get sound duration when metadata loads
+        dryerSound.addEventListener('loadedmetadata', function() {
+            soundDuration = dryerSound.duration;
+        });
+
+        // Event listener for hair dryer click/tap
+        hairDryer.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (!isRunning) {
+                startDryer();
+            } else {
+                pauseDryer();
+            }
+        });
+
+        // Touch support for mobile
+        hairDryer.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            if (!isRunning) {
+                startDryer();
+            } else {
+                pauseDryer();
+            }
+        }, { passive: false });
+
+        // Sound ended event listener
+        dryerSound.addEventListener('ended', function() {
+            stopDryer();
+        });
+
+        // Function to start the hair dryer
+        function startDryer() {
+            isRunning = true;
+            
+            // Add running animation class
+            hairDryer.classList.add('running');
+            statusText.textContent = '🔥 Running... Click to pause!';
+
+            // Play sound
+            dryerSound.currentTime = 0;
+            dryerSound.loop = false;
+            dryerSound.play().catch(error => {
+                console.log('Audio playback error:', error);
+                statusText.textContent = '❌ Audio not available';
+            });
+
+            // Generate sparkles while running
+            const sparkleInterval = setInterval(() => {
+                if (isRunning) {
+                    createSparkle();
+                } else {
+                    clearInterval(sparkleInterval);
+                }
+            }, 400);
+        }
+
+        // Function to pause the hair dryer
+        function pauseDryer() {
+            isRunning = false;
+            
+            // Remove running animation class
+            hairDryer.classList.remove('running');
+            statusText.textContent = '⏸️ Paused... Click to resume!';
+
+            // Pause sound (don't reset)
+            dryerSound.pause();
+        }
+
+        // Function to stop the hair dryer
+        function stopDryer() {
+            isRunning = false;
+            
+            // Remove running animation class
+            hairDryer.classList.remove('running');
+            statusText.textContent = '✅ Done! Click to start again.';
+
+            // Stop sound
+            dryerSound.pause();
+            dryerSound.currentTime = 0;
+
+            // Clear status after 2 seconds
+            setTimeout(() => {
+                statusText.textContent = '';
+            }, 2000);
+        }
+
+        // Function to create sparkles
+        function createSparkle() {
+            const sparkles = ['✨', '💫', '⭐'];
+            const randomSparkle = sparkles[Math.floor(Math.random() * sparkles.length)];
+
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            sparkle.textContent = randomSparkle;
+
+            // Random position around the dryer
+            const dryerRect = hairDryer.getBoundingClientRect();
+            const randomX = dryerRect.left + Math.random() * dryerRect.width;
+            const randomY = dryerRect.top + Math.random() * dryerRect.height;
+
+            sparkle.style.left = randomX + 'px';
+            sparkle.style.top = randomY + 'px';
+
+            document.body.appendChild(sparkle);
+
+            // Remove sparkle after animation
+            setTimeout(() => {
+                sparkle.remove();
+            }, 3000);
+        }
+
+        // Create initial decorative sparkles on page load
+        window.addEventListener('load', function() {
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    createSparkle();
+                }, i * 200);
+            }
+        });
+
+        // Prevent default touch behaviors on mobile
+        document.addEventListener('touchmove', function(e) {
+            if (e.target.closest('.hair-dryer-image')) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+    </script>
+</body>
+
+</html>
